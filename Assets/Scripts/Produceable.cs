@@ -12,6 +12,7 @@ public class Produceable : MonoBehaviour {
 
 	public Item[] ingredients;
 	public int[] ingredientCounts;
+	public bool needsHeat;
 
 	public int amntOwned;
 
@@ -22,6 +23,8 @@ public class Produceable : MonoBehaviour {
 	private Text info;
 	private ProgressBar bar;
 	private Button button;
+
+	private string recipieString = "";
 
 	// Use this for initialization
 	void Start () {
@@ -39,6 +42,22 @@ public class Produceable : MonoBehaviour {
 
 		title.text = item.name ();
 		button.onClick.AddListener(Clicked);
+
+		if (item.Equals (Item.Fire)) {
+			bar.gameObject.GetComponent<Image> ().color = Color.red;
+		}
+
+
+		for (int i = 0; i < Mathf.Min (ingredients.Length, ingredientCounts.Length); i++) {
+			recipieString += ingredientCounts [i].ToString () + " " + ingredients [i].name () + "\n"; 
+		}
+		if (needsHeat) {
+			recipieString += "Heat\n";
+		}
+		recipieString += "\u231a " + timeToProduce.ToString ();
+		if (!item.Equals (Item.Fire)) {
+			recipieString += " \u2192 " + amntProduced;
+		}
 	}
 	
 	// Update is called once per frame
@@ -50,8 +69,23 @@ public class Produceable : MonoBehaviour {
 				producing = false;
 				amntOwned += amntProduced;
 			}
+				
+			if (needsHeat) {
+				Produceable p = Produceable.find (Item.Fire, 1); //TODO tracked fire source
+				Debug.Log(p);
+				if (p == null) {
+					timeLeft = 0;
+					producing = false;
+				}
+			}
 		}
-		info.text = amntOwned.ToString ();
+
+
+		if (item.Equals (Item.Fire)) {
+			amntOwned = Mathf.CeilToInt (timeLeft);
+		}
+
+		info.text = amntOwned.ToString () + "\n" + recipieString;
 		bar.UpdateBar (timeLeft / timeToProduce);
 	}
 
@@ -68,6 +102,11 @@ public class Produceable : MonoBehaviour {
 					prods.Add (p);
 				}
 			}
+			if (needsHeat && !anyNull) {
+				Produceable p = Produceable.find (Item.Fire, 1);//TODO Save longest heat source, stop if exactly that one goes out
+				anyNull = (p == null);
+			}
+
 			if (!anyNull) {
 				producing = true;
 				timeLeft = timeToProduce;

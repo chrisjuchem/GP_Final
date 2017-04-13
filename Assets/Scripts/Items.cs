@@ -5,7 +5,10 @@ using UnityEngine;
 public enum Item {
 
 	Tool,
-	Iron
+	Iron,
+	Ore,
+	Wood,
+	Fire
 
 }
 
@@ -16,8 +19,15 @@ public static class itemMethods{
 			return "Tool";
 		case Item.Iron:
 			return "Iron";
+		case Item.Ore:
+			return "Ore";
+		case Item.Wood:
+			return "Wood";
+		case Item.Fire:
+			return "Fire";
 		default:
 			return "";
 		}
 	}
+
 }
