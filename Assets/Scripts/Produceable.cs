@@ -47,17 +47,20 @@ public class Produceable : MonoBehaviour {
 			bar.gameObject.GetComponent<Image> ().color = Color.red;
 		}
 
-
+		int lines = 2; //time to produce && amntOwned
 		for (int i = 0; i < Mathf.Min (ingredients.Length, ingredientCounts.Length); i++) {
 			recipieString += ingredientCounts [i].ToString () + " " + ingredients [i].name () + "\n"; 
+			lines += 1;
 		}
 		if (needsHeat) {
 			recipieString += "Heat\n";
+			lines += 1;
 		}
 		recipieString += "\u231a " + timeToProduce.ToString ();
 		if (!item.Equals (Item.Fire)) {
 			recipieString += " \u2192 " + amntProduced;
 		}
+		GetComponent< RectTransform >( ).SetSizeWithCurrentAnchors( RectTransform.Axis.Vertical, 75 + 16 * lines);
 	}
 	
 	// Update is called once per frame
