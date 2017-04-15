@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Produceable : MonoBehaviour {
+public class Recipie : MonoBehaviour {
 
 	public Item item;
 
@@ -74,7 +74,7 @@ public class Produceable : MonoBehaviour {
 			}
 				
 			if (needsHeat) {
-				Produceable p = Produceable.find (Item.Fire, 1); //TODO tracked fire source
+				Recipie p = Recipie.find (Item.Fire, 1); //TODO tracked fire source
 				Debug.Log(p);
 				if (p == null) {
 					timeLeft = 0;
@@ -94,10 +94,10 @@ public class Produceable : MonoBehaviour {
 
 	public void Clicked() {
 		if (!producing) {
-			List<Produceable> prods = new List<Produceable> ();
+			List<Recipie> prods = new List<Recipie> ();
 			bool anyNull = false;
 			for (int i = 0; i < Mathf.Min (ingredients.Length, ingredientCounts.Length); i++) {
-				Produceable p = Produceable.find(ingredients[i], ingredientCounts[i]);
+				Recipie p = Recipie.find(ingredients[i], ingredientCounts[i]);
 				if (p == null) {
 					anyNull = true;
 					break;
@@ -106,7 +106,7 @@ public class Produceable : MonoBehaviour {
 				}
 			}
 			if (needsHeat && !anyNull) {
-				Produceable p = Produceable.find (Item.Fire, 1);//TODO Save longest heat source, stop if exactly that one goes out
+				Recipie p = Recipie.find (Item.Fire, 1);//TODO Save longest heat source, stop if exactly that one goes out
 				anyNull = (p == null);
 			}
 
@@ -120,9 +120,9 @@ public class Produceable : MonoBehaviour {
 		}
 	}
 
-	public static Produceable find(Item t, int count) {
+	public static Recipie find(Item t, int count) {
 		foreach (GameObject i in GameObject.FindGameObjectsWithTag ("Item")) {
-			Produceable p = i.GetComponent<Produceable> ();
+			Recipie p = i.GetComponent<Recipie> ();
 			if (p.item == t && p.amntOwned >= count) {
 				return p;
 			}
